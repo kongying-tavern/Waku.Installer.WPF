@@ -1,0 +1,4 @@
+﻿﻿FindWindow
+ShowWindow
+SetForegroundWindow
+FlashWindow
