@@ -1,11 +1,13 @@
 using System;
 using System.Threading;
 
+using WpfApp.Constants;
+
 namespace WpfApp;
 
 public static class EntryPoint
 {
-    private const string MutexId = $"Global\\{GlobalVars.AppGuid}";
+    private const string MutexId = $"Global\\{Global.AppGuid}";
 
     /// <summary>
     ///     WPF applications must run in a single-threaded apartment
@@ -28,7 +30,7 @@ public static class EntryPoint
         }
         else
         {
-            Utils.SetInstanceAsForegroundWindowWithFlash(GlobalVars.MainWindowName);
+            Utils.Interop.SetInstanceAsForegroundWindowWithFlash(Global.MainWindowName);
         }
     }
 }

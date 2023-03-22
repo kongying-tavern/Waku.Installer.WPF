@@ -2,6 +2,8 @@
 using System.Windows;
 using System.Windows.Input;
 
+using WpfApp.Constants;
+
 namespace WpfApp;
 
 /// <summary>
@@ -14,10 +16,10 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         // Set initial skin
-        SetCurrentSkin();
+        CurrentSkin = SetCurrentSkin(Global.LightSkinName);
     }
 
-    private string CurrentSkin { get; set; } = GlobalVars.LightSkin;
+    private static string CurrentSkin { get; set; } = Global.LightSkinName;
 
     private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
@@ -36,24 +38,22 @@ public partial class MainWindow : Window
 
     private void SkinButton_Click(object sender, RoutedEventArgs e)
     {
-        if (string.Equals(CurrentSkin, "LightSkin"))
-        {
-            CurrentSkin = "DarkSkin";
-            SetCurrentSkin();
-        }
-        else if (string.Equals(CurrentSkin, "DarkSkin"))
-        {
-            CurrentSkin = "LightSkin";
-            SetCurrentSkin();
-        }
-        else
-        {
-            throw new NotImplementedException("Can not found theme skin.");
-        }
+        CurrentSkin = ChangeSkin(CurrentSkin);
     }
 
-    private void SetCurrentSkin()
+    private static string ChangeSkin(string currentSkin)
     {
-        Application.Current.Resources = Application.Current.Properties[CurrentSkin] as ResourceDictionary;
+        return currentSkin switch
+        {
+            Global.LightSkinName => SetCurrentSkin(Global.DarkSkinName),
+            Global.DarkSkinName => SetCurrentSkin(Global.LightSkinName),
+            _ => throw new ArgumentOutOfRangeException(nameof(currentSkin), currentSkin, "Can not found theme skin.")
+        };
+    }
+
+    private static string SetCurrentSkin(string skinName)
+    {
+        Application.Current.Resources = Application.Current.Properties[skinName] as ResourceDictionary;
+        return skinName;
     }
 }
